@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1 width=device-width">
+        <title>{% block title %}Thought Bubble{% endblock %}</title>
+        <link href='https://fonts.googleapis.com/css?family=ADLaM Display' rel='stylesheet'>
+        <style>
+            body {
+                background-color: #ADD8E6;
+                font-family: 'ADLaM Display';font-size: 19px;
+            }
+            h1 {
+                position: relative;
+                top: 70px;
+                left: 10px;
+                text-align: center;
+            }
+            h2 {
+                font-size: 20px;
+                position: relative;
+                top: 60px;
+                left: 10px;
+                text-align: center;
+            }
+            footer {
+                position: absolute;
+                left: 650px;
+                top: 700px;
+                text-align: center;
+            }
+            ul {
+                position: fixed;
+                top: 0px;
+                right: 15px;
+                list-style-type: none;
+                padding: 0;
+                overflow: hidden;
+            }
+            li {
+                float: right;
+            }
+            li a {
+                display: block;
+                color: black;
+                text-align: center;
+                padding: 30px 20px;
+                text-decoration: none;
+            }
+            li a:hover {
+                background-color: rgba(255,255,255,0.5);
+            }
+            .div1 {
+                position: relative;
+                left: 0;
+                top: 150px;
+                text-align: center;
+            }
+            button.div1 {
+                display: block;
+                margin: 0 auto;
+                padding: 15px 30px;
+                font-size: 18px;
+                top: 215px;
+                border-radius: 20px;
+                width: 10%;
+            }
+            button.div1:hover {
+                cursor: pointer;
+                background-color: white;
+            }
+            .div3 {
+                position: fixed;
+                top: 10px;
+            }
+            img.div3:hover {
+                cursor: pointer;
+            }
+            input[type=text] {
+                border-radius: 50px;
+                width: 30%;
+                padding: 12px 20px;
+                margin: 8px 0;
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+
+    <body>
+        {% block header %}
+        <header>
+            <h1><i>Welcome to Thought Bubble!</i></h1>
+            <h2><i>(A Web Application For You to Post Your Blogs)</i></h2>
+            <img id="myimage" class="div3" src="https://images.squarespace-cdn.com/content/v1/5c334ba65b409b49b0a0f9ae/a39fdffb-f869-4a39-a162-34ada9bf0f75/Thought+Bubble+Logos-06.png" style="width:128px;height:70px;margin-top:20px;margin-left:20px;">
+            <script>
+                document.getElementById("myimage").addEventListener("click", function() {
+                    window.location.href = "/";
+                });
+            </script>
+        </header>
+        {% endblock %}
+        {% block content %}
+        <main>
+                <form id="myform" action="/login" method="post">
+                    <div class="div1">
+                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" id="username" placeholder="Username:" type="text" required>
+                    </div>
+                    <div class="div1">
+                        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="password" id="password" placeholder="Password:" type="text" required>
+                    </div>
+                    <button class="div1" type="submit">Log In</button>
+                </form>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+
+                            document.getElementById("username").oninvalid = function(event) {
+                                    event.target.setCustomValidity("Please enter a username.");
+                            };
+
+                            document.getElementById("username").oninput = function(event) {
+                                    event.target.setCustomValidity("");
+                            };
+
+                            document.getElementById("password").oninvalid = function(event) {
+                                    event.target.setCustomValidity("Please enter a password.");
+                            };
+
+                            document.getElementById("password").oninput = function(event) {
+                                    event.target.setCustomValidity("");
+                            };
+                    });
+                </script>
+        </main>
+        {% endblock %}
+
+        {% block footer %}
+        <ul>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/">Log In</a></li>
+        </ul>
+        {% endblock %}
+        <footer>
+                <p>&copy; Thought Bubble</p>
+        </footer>
+    </body>
+</html>

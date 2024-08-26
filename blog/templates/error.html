@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Error
+{% endblock %}
+
+{% block header %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <style>
+        body {
+            background-color: #ADD8E6;
+            font-family: 'ADLaM Display';font-size: 19px;
+        }
+        button:hover {
+            cursor: pointer;
+            background-color: white;
+        }
+    </style>
+    <h1 style="position: absolute; top: 70px; left: 670px; text-align: center;"><i>Error!</i></h1>
+    <img id="myimage" class="div3" src="https://images.squarespace-cdn.com/content/v1/5c334ba65b409b49b0a0f9ae/a39fdffb-f869-4a39-a162-34ada9bf0f75/Thought+Bubble+Logos-06.png" style="width:128px;height:70px;margin-top:20px;margin-left:20px;">
+    <h2 style="position: relative; top: 200px; left: 450px; width: 500px; text-align: center; border: 2px solid black; padding: 10px; border-radius: 10px;"> {{ message }} </h2>
+    <button type="submit"; style="position: absolute; top: 500px; left: 680px; font-size: 20px; border-radius: 20%; padding: 15px;" onclick="history.back()">Return</button>
+    <script>
+        document.getElementById("myimage").addEventListener("click", function() {
+            window.location.href = "/";
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block main %}
+{% endblock %}
