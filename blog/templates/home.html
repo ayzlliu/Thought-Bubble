@@ -1,0 +1,297 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block header %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <style>
+        button.div1 {
+            position: fixed;
+            top: 630px;
+            left: 660px;
+            text-align: center;
+        }
+        body {
+            background-color: #ADD8E6;
+            font-family: 'ADLaM Display'; font-size: 19px;
+        }
+        li {
+            list-style-type: none;
+        }
+        .blog_container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            width: 1460px;
+            gap: 20px;
+            top: 60px;
+            position: relative;
+            height: 400px;
+            overflow-y: scroll;
+        }
+        .blog_entry {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 220px;
+            height: 100px;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 25%;
+            text-align: center;
+        }
+        .blog_entry h2 {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        .blog_entry p {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            margin: 0;
+            padding: 5px 0;
+        }
+        .blog_entry:hover {
+            background-color: #f0f0f0;
+        }
+        .popup {
+            width: 1420px;
+            height: 400px;
+            display: none;
+            position: fixed;
+            top: 49%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ccc;
+            background-color: #fff;
+            padding: 20px;
+            z-index: 1000;
+            overflow-y: auto;
+            border-radius: 30px;
+        }
+        .popup-content {
+            position: relative;
+        }
+        .close {
+            position: relative;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+        }
+        .new_user_msg {
+            font-size: 30px;
+            position: fixed;
+            top: 330px;
+            left: 570px;
+        }
+        .blog_entry_container {
+            position: relative;
+        }
+        .delete_button {
+            cursor: pointer;
+            padding-right: 40px;
+            display: none;
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            border-radius: 20%;
+            width: 52px;
+            height: 20px;
+        }
+        .delete_button:hover {
+            background-color: #D3D3D3;
+            cursor: pointer;
+        }
+        .edit_button {
+            cursor: pointer;
+            padding-right: 40px;
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 30px;
+            border-radius: 20%;
+            width: 52px;
+            height: 20px;
+        }
+        .edit_button:hover {
+            background-color: #D3D3D3;
+            cursor: pointer;
+        }
+        .blog_entry_container:hover
+        .delete_button {
+            display: block;
+        }
+        .blog_entry_container:hover
+        .edit_button {
+            display: block;
+        }
+        .popup-content input[type="text"],
+        .popup-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .popup-content textarea {
+            height: 250px;
+            margin-top: 20px;
+            resize: vertical;
+        }
+        button.save_button {
+            margin-top: 20px;
+        }
+        #popup-title {
+            margin-top: 20px;
+        }
+        #display-content {
+            margin-top: 20px;
+        }
+        .fire-emoji {
+            top: 40px;
+        }
+    </style>
+    <h1 style="position: absolute; top: 70px; left: 650px; text-align: center;"><i>My Blogs</i></h1>
+    <span class="fire-emoji" style="position: absolute; top: 130px; left: 20px; font-size: 40px;">&#128293;</span>
+    <span style="position: absolute; top: 142px; left: 70px; font-size: 24px;">Your blog count is: {{ blog_count }}</span>
+    <span class="blog-counter" style="position: absolute; top: 142px; left: 240px; font-size: 24px;"></span>
+    <meta name="viewport" content="initial-scale=1 width=device-width">
+    <img id="myimage" class="div3" src="https://images.squarespace-cdn.com/content/v1/5c334ba65b409b49b0a0f9ae/a39fdffb-f869-4a39-a162-34ada9bf0f75/Thought+Bubble+Logos-06.png" style="width:128px;height:70px;margin-top:20px;margin-left:20px;">
+    <script>
+        document.getElementById("myimage").addEventListener("click", function() {
+            window.location.href = "/";
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <li><a href="/">Log Out</a></li>
+    <div class="blog_container">
+        {% if blogs|length == 0 %}
+            <p class="new_user_msg"> No blogs yet, post one!</p>
+        {% else %}
+            <div class="blog_container">
+                {% for blog in blogs %}
+                    <div class="blog_entry_container">
+                        <input type="hidden" id="blog-id" value="">
+                        <button class="blog_entry" onclick="showPopup('{{ blog.content }}')">
+                            <p>{{ blog.created_at }}</p>
+                            <h2>{{ blog.title }}</h2>
+                        </button>
+                        <button class="delete_button" onclick="deleteBlog('{{ blog.id }}')">Delete</button>
+                        <button class="edit_button" onclick="editBlog('{{ blog.id }}')">Edit</button>
+                    </div>
+                    <script>
+                        function deleteBlog(blogId) {
+                            fetch(`/delete_blog?blogId=${blogId}`, {
+                                method: 'DELETE'
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    location.reload();
+                                    document.querySelector(`button[onclick="deleteBlog('${blogId}')"]`).parentElement.remove();
+                                }
+                            });
+                        }
+
+                        let blogId;
+
+                        function editBlog(id) {
+                            blogId = id;
+                            fetch(`/edit_blog?blogId=${blogId}`, {
+                                method: 'GET'
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    showEditPopup(data.title, data.content);
+                                }
+                            });
+                        }
+                    </script>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <button class="div1" onclick="window.location.href='/post'">Post a New Blog</button>
+    <div id="popup" class="popup">
+        <div class="popup-content" class="popup">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <div id="display-content"></div>
+            <input class="title_field" type="text" id="popup-title" style="display: none;"></input>
+            <textarea class="edit_field" id="popup-text" style="display: none;"></textarea>
+            <button id="save-button" class="save_button" onclick="saveChanges(blogId, document.getElementById('popup-title').value, document.getElementById('popup-text').value)" style="display: none;">Save</button>
+        </div>
+    </div>
+    <script>
+        function showPopup(content) {
+            document.getElementById('display-content').innerText = content;
+            document.getElementById('popup-title').style.display = 'none';
+            document.getElementById('popup-text').style.display = 'none';
+            document.getElementById('save-button').style.display = 'none';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function showEditPopup(title, content) {
+            document.getElementById('display-content').style.display = 'none';
+            document.getElementById('popup-title').value = title;
+            document.getElementById('popup-text').value = content;
+            document.getElementById('popup-title').style.display = 'block';
+            document.getElementById('popup-text').style.display = 'block';
+            document.getElementById('save-button').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function openPopup(blogId, title, content) {
+            document.getElementById('blog-id').value = blogId;
+            document.getElementById('popup-title').value = title;
+            document.getElementById('popup-text').value = content;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function saveChanges(blogId, title, content) {
+            fetch('/edit_blog', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'blogId': blogId,
+                    'title': title,
+                    'content': content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Changes saved successfully!');
+                    closePopup();
+                    location.reload();
+                } else {
+                    alert('Failed to save changes.');
+                    location.reload();
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

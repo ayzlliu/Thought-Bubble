@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block header %}
+        <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        </head>
+        <style>
+        .div1 {
+            position: relative;
+            left: 0;
+            top: 230px;
+            text-align: center;
+        }
+        button.div1 {
+                display: block;
+                margin: 0 auto;
+                padding: 15px 30px;
+                font-size: 18px;
+                top: 290px;
+                border-radius: 20px;
+                width: 10%;
+
+        }
+        </style>
+        <h1 style="position: absolute; top: 70px; left: 560px; text-align: center;"><i>Create an Account</i></h1>
+        <img id="myimage" class="div3" src="https://images.squarespace-cdn.com/content/v1/5c334ba65b409b49b0a0f9ae/a39fdffb-f869-4a39-a162-34ada9bf0f75/Thought+Bubble+Logos-06.png" style="width:128px;height:70px;margin-top:20px;margin-left:20px;">
+        <script>
+                document.getElementById("myimage").addEventListener("click", function() {
+                        window.location.href = "/";
+                });
+        </script>
+{% endblock %}
+
+{% block content %}
+
+<form action="/register" method="post">
+        <div class="div1">
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username:" type="text" id="username" required>
+        </div>
+        <div class="div1">
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="password" placeholder="Password:" type="text" id="password" required>
+        </div>
+        <div class="div1">
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm Your Password:" type="text" id="confirmation" required>
+        </div>
+        <button class="div1" type="submit">Register</button>
+</form>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+                document.getElementById("username").oninvalid = function(event) {
+                        event.target.setCustomValidity("Please enter a username.");
+                };
+
+                document.getElementById("username").oninput = function(event) {
+                        event.target.setCustomValidity("");
+                };
+
+                document.getElementById("password").oninvalid = function(event) {
+                        event.target.setCustomValidity("Please enter a password.");
+                };
+
+                document.getElementById("password").oninput = function(event) {
+                        event.target.setCustomValidity("");
+                };
+
+                document.getElementById("confirmation").oninvalid = function(event) {
+                        event.target.setCustomValidity("Please enter confirmation password.");
+                };
+
+                document.getElementById("confirmation").oninput = function(event) {
+                        event.target.setCustomValidity("");
+                };
+        });
+</script>
+{% endblock %}
